@@ -10,8 +10,10 @@ let currValidStartNodeClicked = null; //if a user clicks a possible node to buil
 let proposedEndNode = null; //user can build off of this point
 let mostRecentEndNodeOne = null; //this is one end of the current continuous line and is set when a valid start node is clicked. this resets if the player clicks the same node twice
 let mostRecentEndNodeTwo = null; //this is the other end of the current continuos line that is set after a valid move is completed
+let gameIsOverAndNeedsReset = false;
 
 function messageResponseFactory(message) {
+  let response = null;
   let clientMessage = message.msg; //get the msg from the client
   let nodePointClicked = message.body; //get click point information from the client
 
@@ -19,6 +21,18 @@ function messageResponseFactory(message) {
   if (clientMessage === "INITIALIZE") {
     return initialize();
   } else if (clientMessage === "NODE_CLICKED") {
+    if (gameIsOverAndNeedsReset === true) {
+      response = {
+        msg: "INVALID_START_NODE", //complete a line before testing this
+        body: {
+          heading: "GAME OVER",
+          message: "Player" + playerTurn + "wins!",
+          newLine: null,
+        },
+      };
+      return response;
+    }
+
     return nodeClickResponseFactory(nodePointClicked); //return this payload to the caller and the caller will assign it to a variable and ship it off to the client
   } else {
     console.error("something is wrong with the message format");
@@ -190,6 +204,7 @@ function nodeClickResponseFactory(nodePointClicked) {
             },
           },
         };
+        gameIsOverAndNeedsReset = true;
       } else if (
         gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) === false
       ) {
@@ -828,6 +843,7 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         console.log(isThereAnIntersectionConflict);
         availableNodesOneRoundOne.splice(i, 1);
         console.log(availableNodesOneRoundOne);
+        i--;
         if (availableNodesOneRoundOne.length === 0) {
           break;
         } else {
@@ -850,7 +866,7 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
       let startingPointX = mostRecentEndNodeTwo.x;
       let startingPointY = mostRecentEndNodeTwo.y;
       console.log(availableNodesTwoRoundOne);
-      console.trace(availableNodesTwoRoundOne); //if array is empty going in a reference error happens
+      console.log(availableNodesTwoRoundOne.length); //if array is empty going in a reference error happens
       let endingPointX = availableNodesTwoRoundOne[i].x;
       let endingPointY = availableNodesTwoRoundOne[i].y;
       let existingStartingPointX =
@@ -877,10 +893,10 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         isThereAnIntersectionConflict[0] !== startingPointX &&
         isThereAnIntersectionConflict[1] !== startingPointY
       ) {
-        // areTherePassingNodesFromEndNodeTwo = true; //push here to keep
         console.log(isThereAnIntersectionConflict);
         availableNodesTwoRoundOne.splice(i, 1);
         console.log(availableNodesTwoRoundOne);
+        i--;
         if (availableNodesTwoRoundOne.length === 0) {
           break;
         } else {
