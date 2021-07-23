@@ -1,111 +1,138 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
 }
 
 html {
-    font-size: 62.5%;
+  font-size: 62.5%;
 }
 
 body {
-    font-size: 1.6rem;
+  font-size: 1.6rem;
 }
 
 #app {
-    position: relative;
+  position: relative;
 }
 
 #app,
 #app .error-wrapper {
-    width: 100vw;
-    height: 70vh;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
+  width: 100vw;
+  height: 50vh;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
 }
 
 #app .app-container {
-    line-height: 0;
+  line-height: 0;
 }
 
 #app .error-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 #app .heading,
 #app .message {
-    position: absolute;
-    left: 0;
-    width: 100vw;
-    text-align: center;
-    line-height: initial;
+  position: absolute;
+  left: 0;
+  width: 100vw;
+  text-align: center;
+  line-height: initial;
 }
 
 #app .heading {
-    top: 0;
+  top: 0;
 }
 
 #app .message {
-    bottom: 0;
+  bottom: 0;
 }
 
 #app .error {
-    max-width: 60rem;
-    font-family: monospace;
-    line-height: initial;
+  max-width: 60rem;
+  font-family: monospace;
+  line-height: initial;
 }
 
 #app .error .title,
 #app .error .body {
-    display: block;
-    padding: 1.2rem 1.5rem;
+  display: block;
+  padding: 1.2rem 1.5rem;
 }
 
 #app .error .title {
-    background: #D23232;
-    font-weight: 600;
-    color: white;
-    text-transform: uppercase;
+  background: #d23232;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
 }
 
 #app .error .body {
-    background: #FFD9D9;
-    line-height: 2.2rem;
+  background: #ffd9d9;
+  line-height: 2.2rem;
 }
 
 #main {
-
-text-align: center;
-margin-bottom: 1rem;
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 #score {
-    margin: 6rem 0 4rem 0;
+  margin: 6rem 0 4rem 0;
 }
 
 #score-boxes {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 2rem;
 }
 
-#player1-score, #player2-score {
-    width: 10rem;
-    height: 4rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#player1-score,
+#player2-score {
+  width: 10rem;
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #title {
-    margin-top: 0;
-    padding: 2rem 0 2rem 0;
-    background: blue;
-    color: white;
+  margin-top: 0;
+  padding: 2rem 0 2rem 0;
+  background: rgb(9, 9, 180);
+  color: white;
+}
+
+#p1-score-container,
+#p2-score-container {
+  border: 0.25rem solid black;
+}
+
+#player1-score-title,
+#player2-score-title {
+  border-bottom: 0.25rem solid black;
+}
+
+#reset-game,
+#clear-scores {
+  background: black;
+  color: white;
+  border: 0.25rem solid black;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+#directions {
+    margin: 1rem 3rem 3rem 3rem;
+    text-align: left;
 }

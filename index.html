@@ -9,18 +9,40 @@
       <div id="added-features">
         <div id="ui-buttons">
           <h1 id="title">Hold That Line: Dot Game</h1>
-          <button id="reset-game" onclick="resetGame()">Reset</button>
+          <h2>Directions</h2>
+          <div id="directions">
+            <p>Rules:</p>
+            <p>
+              The game is played on a 4x4 grid of 16 nodes. Players take turns
+              drawing octilinear lines connecting nodes. Each line must begin at
+              the start or end of the existing path, so that all lines form a
+              continuous path. The first line may begin on any node. A line may
+              connect any number of nodes. Lines may not intersect. No node can
+              be visited twice. The game ends when no valid lines can be drawn.
+              The player who draws the last line is the loser.
+            </p>
+            <p>Definitions:</p>
+            <p>
+              octilinear line - a horizontal, vertical, or 45° diagonal line
+            </p>
+          </div>
+          <button id="reset-game" onclick="resetGame()">Reset Board</button>
           <button id="clear-scores" onclick="clearScores()">
             Clear Scores
           </button>
-          <button id="directions">Directions</button>
         </div>
-        <div id="score">Score Board</div>
+        <div id="score">
+          <h2>Score Board</h2>
+        </div>
         <div id="score-boxes">
-          <div id="player1-score-title">P1</div>
-          <div id="player1-score"></div>
-          <div id="player2-score-title">P2</div>
-          <div id="player2-score"></div>
+          <div id="p1-score-container">
+            <div id="player1-score-title">P1</div>
+            <div id="player1-score"></div>
+          </div>
+          <div id="p2-score-container">
+            <div id="player2-score-title">P2</div>
+            <div id="player2-score"></div>
+          </div>
         </div>
       </div>
       <div id="app"></div>
