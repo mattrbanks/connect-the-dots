@@ -1,4 +1,4 @@
-<p align="center"><img src="/Images/example-game.svg" alt="An image of a finished game of connect the dots."></p>
+<p align="center"><img src="/Images/sid-sackson.jpg" alt="An image of a finished game of connect the dots."></p>
 
 <h1 align="center">
   Connect The Dots Game
@@ -8,21 +8,13 @@ This is a connect-the-dots game for two players.
 
 ## Technologies Used
 
+- **HTML5**
+
+- **CSS3**
+
 - **JavaScript**
 
-- **React**
-
-- **GatsbyJS**
-
-- **Material UI**
-
-- **Express**
-
-- **Node**
-
-- **Web Push**
-
-- **Socket.io**
+- **Elm**
 
 ## How The Game Works
 
@@ -58,6 +50,17 @@ This is a connect-the-dots game for two players.
 
 The game was designed by Sid Sackson.
 
+All Elm client code was written by KMBS Solutions Engineering Center.
+
+I wrote the game server code and added some client side features.
+
+The function isIntersecting in server.js was found here: [stackoverflow.com/questions/42892862/how-do-i-find-the-point-at-which-two-line-segments-are-intersecting-in-javascrip?rq=1](https://stackoverflow.com/questions/42892862/how-do-i-find-the-point-at-which-two-line-segments-are-intersecting-in-javascrip?rq=1)
+
 ## Visit the website:
 
-[quick-chat.netlify.app](https://quick-chat.netlify.app/)
+[hold-that-line-dot-game.netlify.app](https://hold-that-line-dot-game.netlify.app/)
+
+## Run/setup:
+
+Fork, clone, or download the repo.
+Open index.html in your browser.

@@ -16,9 +16,5 @@
     "url": "https://github.com/mattrbanks/connect-the-dots/issues"
   },
   "homepage": "https://github.com/mattrbanks/connect-the-dots#readme",
-  "dependencies": {
-    "bootstrap": "^5.0.2",
-    "jest": "^27.0.6",
-    "tailwindcss": "^2.2.4"
-  }
+  "dependencies": {}
 }
