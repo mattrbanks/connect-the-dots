@@ -17,7 +17,6 @@ let playerTwoScore = 0;
 if (typeof Storage !== "undefined") {
   const p1ScoreBox = document.getElementById("player1-score");
   const p2ScoreBox = document.getElementById("player2-score");
-  // Store
   if (
     sessionStorage.getItem("playerOneScore") === null &&
     sessionStorage.getItem("playerTwoScore") === null
@@ -95,8 +94,6 @@ function initialize() {
       newLine: null,
     },
   };
-  console.log(" SERVER INITIALIZE GAME");
-  console.log(initGameReset);
 
   const p1ScoreBox = document.getElementById("player1-score");
   const p2ScoreBox = document.getElementById("player2-score");
@@ -131,9 +128,6 @@ function nodeClickResponseFactory(nodePointClicked) {
         validMovesCount > 0)
     ) {
       //if the players are in the middle of a game and then the player must select either of the two end nodes of the existing line to be a valid start node.
-      console.log("We made it there!!!");
-      console.log(mostRecentEndNodeOne);
-      console.log(mostRecentEndNodeTwo);
       response = {
         msg: "VALID_START_NODE",
         body: {
@@ -204,9 +198,6 @@ function nodeClickResponseFactory(nodePointClicked) {
           mostRecentEndNodeTwo = nodePointClicked;
         }
         //we will handle this depending on what endpoint the player chooses
-        console.log(
-          "need to only update the side that the player built off of and leave the other end node set as is until it is used in a move"
-        );
       }
 
       lineIntermediateCoordinatesFactory(
@@ -215,13 +206,7 @@ function nodeClickResponseFactory(nodePointClicked) {
       );
 
       validMovesCount++;
-      console.log(validMovesCount);
-
-      console.log(currValidStartNodeClicked);
-      console.log(nodePointClicked);
-      console.log(mostRecentEndNodeOne);
-      console.log(mostRecentEndNodeTwo);
-      //WE HAVE ONE OBJECT WITH TWO POINTS FOR EACH LINE SO WE NEED TO ACCESS THE POINT COORDINATES USING THE KEY FIRST LIKE THE BELOW CONSOLE LOGS
+      //WE HAVE ONE OBJECT WITH TWO POINTS FOR EACH LINE SO WE NEED TO ACCESS THE POINT COORDINATES USING THE KEY FIRST
       existingLinesCollection = [
         ...existingLinesCollection,
         {
@@ -229,18 +214,6 @@ function nodeClickResponseFactory(nodePointClicked) {
           nodePointClicked,
         },
       ];
-      //THE LOGS BELOW ARE IMPORTANT FOR EVALUATING LINE INTERSECTIONS
-      console.log(existingLinesCollection[0].currValidStartNodeClicked);
-      console.log(existingLinesCollection[0].nodePointClicked);
-      //THE LOGS ABOVE ARE IMPORTANT FOR EVALUATING LINE INTERSECTIONS
-      console.log(currValidStartNodeClicked);
-
-      console.log("Finished lineIntermediateCoordinatesFactory");
-
-      console.log(currValidStartNodeClicked);
-      console.log(nodePointClicked);
-      console.log(validCoordinatesCollection);
-      console.log(existingLinesCollection);
       if (gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) === true) {
         response = {
           msg: "GAME_OVER",
@@ -280,10 +253,7 @@ function nodeClickResponseFactory(nodePointClicked) {
         };
       }
 
-      console.log("HERE!!!");
-
       currValidStartNodeClicked = null;
-      console.log(currValidStartNodeClicked);
     } else if (
       checkIfMoveIsValid(currValidStartNodeClicked, nodePointClicked) === false
     ) {
@@ -298,8 +268,6 @@ function nodeClickResponseFactory(nodePointClicked) {
       currValidStartNodeClicked = null;
     }
   } else {
-    console.log(mostRecentEndNodeOne.x);
-    console.log(mostRecentEndNodeTwo.x);
     response = {
       msg: "INVALID_START_NODE",
       body: {
@@ -315,14 +283,10 @@ function nodeClickResponseFactory(nodePointClicked) {
 }
 
 function checkIfMoveIsValid(currValidStartNodeClicked, nodePointClicked) {
-  console.log("we are in checkIfMoveIsValid with the angle check");
   //see if point is already in use
   //see if the line is horizontal, vertical, or 45deg
   //see if the proposed line intersects an existing line in its path. store all lines so far
   proposedEndNode = nodePointClicked; //on the second click we get new coordinates for the proposed end node. so currValidStartNodeClicked has the start node coordinates available from the first click
-
-  console.log(currValidStartNodeClicked);
-  console.log(proposedEndNode);
 
   //is the line at an acceptable angle?
   let p1 = {
@@ -348,8 +312,6 @@ function checkIfMoveIsValid(currValidStartNodeClicked, nodePointClicked) {
     Math.abs(angleDeg) === 135 ||
     Math.abs(angleDeg) === 315
   ) {
-    console.log("we are evaluating the angle here and it is true");
-    console.log(Math.abs(angleDeg));
     return checkIfEndPointAlreadyExists(
       currValidStartNodeClicked,
       nodePointClicked
@@ -364,8 +326,6 @@ function checkIfMoveIsValid(currValidStartNodeClicked, nodePointClicked) {
     Math.abs(angleDeg) !== 135 ||
     Math.abs(angleDeg) !== 315
   ) {
-    console.log("we are evaluating the angle here and it is false");
-    console.log(Math.abs(angleDeg));
     return false;
   }
 }
@@ -374,18 +334,10 @@ function lineIntermediateCoordinatesFactory(
   currValidStartNodeClicked,
   nodePointClicked
 ) {
-  console.log(
-    currValidStartNodeClicked,
-    nodePointClicked,
-    validCoordinatesCollection
-  );
   if (
     Math.abs(nodePointClicked.x - currValidStartNodeClicked.x) <= 1 &&
     Math.abs(nodePointClicked.y - currValidStartNodeClicked.y) <= 1
   ) {
-    console.log(
-      "Math.abs(nodePointClicked.x - currValidStartNodeClicked.x) <= 1 && Math.abs(nodePointClicked.y - currValidStartNodeClicked.y) <= 1"
-    );
     if (validMovesCount === 0) {
       //This contains all of the used points
       validCoordinatesCollection = [
@@ -431,11 +383,8 @@ function lineIntermediateCoordinatesFactory(
       endingPointY
     );
 
-    console.log(proposedLineSlope, deltaX, deltaY); //example 3/3=1
-
     if (proposedLineSlope === 0) {
       //horizontal line takes delta x
-      // let intPointsNeeded = deltaX - 1;
       //HORIZONTAL LINE
       let x = startingPointX < endingPointX ? startingPointX : endingPointX;
       for (let i = 0; i < deltaX - 1; i++) {
@@ -493,11 +442,6 @@ function lineIntermediateCoordinatesFactory(
         ];
       }
     }
-    console.log(
-      generatedIntCoordinates,
-      currValidStartNodeClicked,
-      nodePointClicked
-    );
   }
 
   if (validMovesCount === 0) {
@@ -518,27 +462,18 @@ function lineIntermediateCoordinatesFactory(
   }
 
   validCoordinatesCollection = [...new Set(validCoordinatesCollection)]; //get rid of duplicates if there are any
-  console.log(generatedIntCoordinates);
-  console.log(validCoordinatesCollection);
 }
 
 function checkIfEndPointAlreadyExists(
   currValidStartNodeClicked,
   nodePointClicked
 ) {
-  console.log("WE ARI INSIDE checkIfEndPointAlreadyExists function");
-  console.log(currValidStartNodeClicked);
-  console.log(nodePointClicked);
-  //console.trace("WHEN IS checkIfEndPointAlreadyExists called???");
   //if this is the first line in the game and existing validCoordinatesCollection and existingLinesCollection are empty then we can approve the endpoint that should have passed as not the same as the valid start node first click
   //if the angle is legal this will trigger true if it is the first move of the game because intersection and existing points or lines is not an issue at this point
   if (
     validCoordinatesCollection.length === 0 &&
     existingLinesCollection.length === 0
   ) {
-    console.log(
-      "THIS IS THE FIRST LINE OF THE GAME SO NO NEED TO COMPARE POINTS"
-    );
     return true;
   } else if (
     validCoordinatesCollection.length !== 0 &&
@@ -546,21 +481,17 @@ function checkIfEndPointAlreadyExists(
   ) {
     //does the proposed endpoint already exist in the current line?
     for (let i = 0; i < validCoordinatesCollection.length; i++) {
-      console.log("INSIDE THE POINT LOOP NOW");
       if (
         nodePointClicked.x === validCoordinatesCollection[i].x && //currently the inner line endpoints are not in this array so they are valid right now
         nodePointClicked.y === validCoordinatesCollection[i].y
       ) {
-        console.log("POINT HAS BEEN USED");
         return false;
       } else {
-        console.log("POINT HAS NOT BEEN USED");
         continue;
       }
     }
   }
 
-  console.log("we are calling function 2");
   return checkIfProposedLineWillIntersect(
     currValidStartNodeClicked,
     nodePointClicked
@@ -571,10 +502,6 @@ function checkIfProposedLineWillIntersect(
   currValidStartNodeClicked,
   nodePointClicked
 ) {
-  console.log(validCoordinatesCollection);
-  console.log(existingLinesCollection);
-  console.log(currValidStartNodeClicked);
-  console.log(nodePointClicked);
   //will this line intersect with any existing lines?
   //this uses currValidStartNodeClicked and nodePointClicked to access x and y values so nodePointClicked.x nodePointClicked.y
   //we compare the incoming line with every other existing line and see if this new segment intersects any other existing segments
@@ -641,39 +568,21 @@ function checkIfProposedLineWillIntersect(
       if (isThereAnIntersectionConflict === false) {
         continue;
       } else if (isThereAnIntersectionConflict !== false) {
-        console.log(
-          "THERE IS A BIG PROBLEM WITH INTERSECTION HERE!!!!!!!!!!!!!!!!!!!!!!!"
-        );
         if (
           isThereAnIntersectionConflict[0] === startingPointX &&
           isThereAnIntersectionConflict[1] === startingPointY
         ) {
           continue;
         } else {
-          console.log(isThereAnIntersectionConflict);
-          console.log("PLUGGED IN COORDINATES BELOW");
-          console.log(
-            startingPointX,
-            startingPointY,
-            endingPointX,
-            endingPointY,
-            existingStartingPointX,
-            existingStartingPointY,
-            existingEndingPointX,
-            existingEndingPointY
-          );
           return false;
         }
       }
     }
   }
-  console.log("we are calling function 3");
   return true;
 }
 
 function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
-  console.log("INSIDE GAME OVER FUNCTION");
-  console.trace("THIS IS WHEN WE CALL gameOver FUNCTION!!!!!!!");
   let endNodeOnePasses = true;
   let endNodeTwoPasses = true;
   let areTherePassingNodesFromEndNodeOne = false; //these switch to true if at least one thing passes
@@ -761,11 +670,9 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
       y: mostRecentEndNodeTwo.y + 1,
     },
   ];
-  console.log(potentialEndNodesOne, potentialEndNodesTwo); //good!!!!!!!
 
   //CHECK 1: eliminate any negative values or values that exceed gridMax immediately
   //potential start node one
-  console.log("INSIDE CHECK ONE GAME OVER");
   for (let i = 0; i < potentialEndNodesOne.length; i++) {
     if (
       potentialEndNodesOne[i].x < 0 ||
@@ -783,8 +690,6 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
       ];
     }
   }
-  console.log(validCoordinatesCollection);
-  console.log(availableNodesOneRoundOne); //good!!!!!!
 
   //potential start node two
   for (let i = 0; i < potentialEndNodesTwo.length; i++) {
@@ -804,51 +709,36 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
       ];
     }
   }
-  console.log(validCoordinatesCollection);
-  console.log(availableNodesTwoRoundOne); //good!!!!!!
 
   //BELOW SHOULD ELIMIMATE USED NODES BUT IT IS NOT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //CHECK 2: we check both valid start nodes individually for used nodes
   //potential start node one
-  console.log("INSIDE CHECK TWO GAME OVER");
   for (let i = validCoordinatesCollection.length - 1; i >= 0; i--) {
     for (let j = availableNodesOneRoundOne.length - 1; j >= 0; j--) {
-      console.log(validCoordinatesCollection);
-      console.log(availableNodesOneRoundOne.length);
       if (
         validCoordinatesCollection[i].x === availableNodesOneRoundOne[j].x &&
         validCoordinatesCollection[i].y === availableNodesOneRoundOne[j].y
       ) {
-        console.log("ADDING NODE ONE!!!"); //TRY CHECKING ANGLES HERE FOR DIAGONAL VS VERTICAL i++ BREAKS THESE AS YOU TOGGLE IT ON AND OFF
-        console.log(availableNodesOneRoundOne[j]);
         availableNodesOneRoundOne.splice(j, 1);
         // i--;
       }
     }
   }
-  console.log(unavailableNodesOneRoundOne);
-  console.log(availableNodesOneRoundOne);
 
   //potential start node two
   for (let i = validCoordinatesCollection.length - 1; i >= 0; i--) {
     for (let j = availableNodesTwoRoundOne.length - 1; j >= 0; j--) {
-      console.log(availableNodesTwoRoundOne.length);
       if (
         validCoordinatesCollection[i].x === availableNodesTwoRoundOne[j].x &&
         validCoordinatesCollection[i].y === availableNodesTwoRoundOne[j].y
       ) {
-        console.log("ADDING NODE TWO!!!");
-        console.log(availableNodesTwoRoundOne[j]);
         availableNodesTwoRoundOne.splice(j, 1);
         // i--;
       }
     }
   }
-  console.log(unavailableNodesTwoRoundOne); //now we can subtract length to use for game over
-  console.log(availableNodesTwoRoundOne);
 
   //CHECK 3: if the potential node is unused then we check if it is an illegal line intersection
-  console.log("INSIDE CHECK THREE GAME OVER");
   function isIntersecting(x1, y1, x2, y2, x3, y3, x4, y4) {
     let a_dx = x2 - x1;
     let a_dy = y2 - y1;
@@ -868,8 +758,6 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
     for (let j = existingLinesCollection.length - 1; j >= 0; j--) {
       let startingPointX = mostRecentEndNodeOne.x;
       let startingPointY = mostRecentEndNodeOne.y;
-      console.log(availableNodesOneRoundOne);
-      //   console.trace(availableNodesOneRoundOne);
       let endingPointX = availableNodesOneRoundOne[i].x;
       let endingPointY = availableNodesOneRoundOne[i].y;
       let existingStartingPointX =
@@ -889,17 +777,13 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         existingEndingPointX,
         existingEndingPointY
       );
-      console.log(i);
 
       if (
         isThereAnIntersectionConflict !== false &&
         isThereAnIntersectionConflict[0] !== startingPointX &&
         isThereAnIntersectionConflict[1] !== startingPointY
       ) {
-        // areTherePassingNodesFromEndNodeOne = true;
-        console.log(isThereAnIntersectionConflict);
         availableNodesOneRoundOne.splice(i, 1);
-        console.log(availableNodesOneRoundOne);
         i--;
         if (availableNodesOneRoundOne.length === 0) {
           break;
@@ -911,8 +795,6 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         isThereAnIntersectionConflict[0] !== startingPointX &&
         isThereAnIntersectionConflict[1] !== startingPointY
       ) {
-        //console.log("INTERSECTION CONFLICT HERE");
-        console.log(isThereAnIntersectionConflict);
       }
     }
   }
@@ -922,8 +804,6 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
     for (let j = existingLinesCollection.length - 1; j >= 0; j--) {
       let startingPointX = mostRecentEndNodeTwo.x;
       let startingPointY = mostRecentEndNodeTwo.y;
-      console.log(availableNodesTwoRoundOne);
-      console.log(availableNodesTwoRoundOne.length); //if array is empty going in a reference error happens
       let endingPointX = availableNodesTwoRoundOne[i].x;
       let endingPointY = availableNodesTwoRoundOne[i].y;
       let existingStartingPointX =
@@ -943,16 +823,12 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         existingEndingPointX,
         existingEndingPointY
       );
-      console.log(i);
-      //you can get rid of the second condition here for closer results but it may be needed and it may be a problem upstream
       if (
         isThereAnIntersectionConflict !== false &&
         isThereAnIntersectionConflict[0] !== startingPointX &&
         isThereAnIntersectionConflict[1] !== startingPointY
       ) {
-        console.log(isThereAnIntersectionConflict);
         availableNodesTwoRoundOne.splice(i, 1);
-        console.log(availableNodesTwoRoundOne);
         i--;
         if (availableNodesTwoRoundOne.length === 0) {
           break;
@@ -964,8 +840,6 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         isThereAnIntersectionConflict[0] !== startingPointX &&
         isThereAnIntersectionConflict[1] !== startingPointY
       ) {
-        //console.log("INTERSECTION CONFLICT HERE");
-        console.log(isThereAnIntersectionConflict);
       }
     }
   }
@@ -982,30 +856,21 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
   // }
 
   //if all 16 surrounding nodes fail from both valid start nodes the game is over and return game over value
-  console.log(availableNodesOneRoundOne, availableNodesOneRoundTwo);
   availableNodesOneRoundOne = [];
   availableNodesOneRoundTwo = [];
-  console.log(availableNodesTwoRoundOne, availableNodesTwoRoundTwo);
   availableNodesTwoRoundOne = [];
   availableNodesTwoRoundTwo = [];
-  console.log(endNodeOnePasses, endNodeTwoPasses);
-  console.log(
-    areTherePassingNodesFromEndNodeOne,
-    areTherePassingNodesFromEndNodeTwo
-  );
 
   if (endNodeOnePasses == false && endNodeTwoPasses == false) {
     return true;
   } else {
     return false;
   }
-  return false;
 }
 
 //Exposed functions to use API for client server communication
 app.ports.request.subscribe((message) => {
   if (gameIsOverAndNeedsReset === true) {
-    console.log("TRYING TO RESET THE GAME");
     let initGameReset = {
       msg: "INITIALIZE",
       body: {
@@ -1017,21 +882,15 @@ app.ports.request.subscribe((message) => {
 
     //send the message to be analyzed by the responseFactory function
     let response = initGameReset; //catch the returned value and send it to client for processing
-    console.log("SERVER RESPONSE IS BELOW");
-    console.log(response);
     gameIsOverAndNeedsReset = false;
     //when the response is determined, send the response to the client
     app.ports.response.send(response);
   } else {
     //parse message to determine a response and then respond
     message = JSON.parse(message);
-    console.log("CLIENT REQUEST IS BELOW");
-    console.log(message);
 
     //send the message to be analyzed by the responseFactory function
     let response = messageResponseFactory(message); //catch the returned value and send it to client for processing
-    console.log("SERVER RESPONSE IS BELOW");
-    console.log(response);
 
     //when the response is determined, send the response to the client
     app.ports.response.send(response);
