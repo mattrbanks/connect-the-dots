@@ -11,6 +11,53 @@ let proposedEndNode = null; //user can build off of this point
 let mostRecentEndNodeOne = null; //this is one end of the current continuous line and is set when a valid start node is clicked. this resets if the player clicks the same node twice
 let mostRecentEndNodeTwo = null; //this is the other end of the current continuos line that is set after a valid move is completed
 let gameIsOverAndNeedsReset = false;
+let playerOneScore = 0;
+let playerTwoScore = 0;
+
+if (typeof Storage !== "undefined") {
+  const p1ScoreBox = document.getElementById("player1-score");
+  const p2ScoreBox = document.getElementById("player2-score");
+  // Store
+  if (
+    sessionStorage.getItem("playerOneScore") === null &&
+    sessionStorage.getItem("playerTwoScore") === null
+  ) {
+    sessionStorage.setItem("playerOneScore", playerOneScore);
+    sessionStorage.setItem("playerTwoScore", playerTwoScore);
+    p1ScoreBox.innerHTML = sessionStorage.getItem("playerOneScore");
+    p2ScoreBox.innerHTML = sessionStorage.getItem("playerTwoScore");
+  } else {
+    p1ScoreBox.innerHTML = sessionStorage.getItem("playerOneScore");
+    p2ScoreBox.innerHTML = sessionStorage.getItem("playerTwoScore");
+  }
+} else {
+  document.getElementById("player1-score").innerHTML =
+    "Sorry, your browser does not support Web Storage...";
+}
+
+function sendScores(p1ScoreUpdate, p2ScoreUpdate) {
+  const p1ScoreBox = document.getElementById("player1-score");
+  const p2ScoreBox = document.getElementById("player2-score");
+
+  p1ScoreBox.innerHTML = p1ScoreUpdate;
+  p2ScoreBox.innerHTML = p2ScoreUpdate;
+}
+
+function clearScores() {
+  sessionStorage.clear();
+  const p1ScoreBox = document.getElementById("player1-score");
+  const p2ScoreBox = document.getElementById("player2-score");
+
+  sessionStorage.setItem("playerOneScore", playerOneScore); //set to 0
+  sessionStorage.setItem("playerTwoScore", playerTwoScore); //set to 0
+
+  p1ScoreBox.innerHTML = sessionStorage.getItem("playerOneScore");
+  p2ScoreBox.innerHTML = sessionStorage.getItem("playerTwoScore");
+}
+
+function resetGame() {
+  window.location.reload();
+}
 
 function messageResponseFactory(message) {
   let response = null;
@@ -39,7 +86,6 @@ function messageResponseFactory(message) {
   }
 }
 
-//start the game --> dynamic naming will be passed here and replace player 1
 function initialize() {
   let initGameReset = {
     msg: "INITIALIZE",
@@ -52,7 +98,11 @@ function initialize() {
   console.log(" SERVER INITIALIZE GAME");
   console.log(initGameReset);
 
-  console.log(currValidStartNodeClicked);
+  const p1ScoreBox = document.getElementById("player1-score");
+  const p2ScoreBox = document.getElementById("player2-score");
+
+  p1ScoreBox.innerHTML = sessionStorage.getItem("playerOneScore");
+  p2ScoreBox.innerHTML = sessionStorage.getItem("playerTwoScore");
 
   return initGameReset;
 }
@@ -73,7 +123,6 @@ function nodeClickResponseFactory(nodePointClicked) {
         },
       };
       currValidStartNodeClicked = nodePointClicked;
-      //   mostRecentEndNodeOne = nodePointClicked;
     } else if (
       (nodePointClicked.x === mostRecentEndNodeOne.x &&
         nodePointClicked.y === mostRecentEndNodeOne.y) ||
@@ -205,10 +254,19 @@ function nodeClickResponseFactory(nodePointClicked) {
           },
         };
         gameIsOverAndNeedsReset = true;
+        let p1ScoreUpdate = sessionStorage.getItem("playerOneScore");
+        let p2ScoreUpdate = sessionStorage.getItem("playerTwoScore");
+        if (playerTurn === 1) {
+          p1ScoreUpdate++;
+          sessionStorage.setItem("playerOneScore", p1ScoreUpdate);
+        } else if (playerTurn === 2) {
+          p2ScoreUpdate++;
+          sessionStorage.setItem("playerTwoScore", p2ScoreUpdate);
+        }
+        sendScores(p1ScoreUpdate, p2ScoreUpdate);
       } else if (
         gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) === false
       ) {
-        //else if
         response = {
           msg: "VALID_END_NODE",
           body: {
@@ -373,7 +431,7 @@ function lineIntermediateCoordinatesFactory(
       endingPointY
     );
 
-    console.log(proposedLineSlope, deltaX, deltaY); //3/3=1
+    console.log(proposedLineSlope, deltaX, deltaY); //example 3/3=1
 
     if (proposedLineSlope === 0) {
       //horizontal line takes delta x
@@ -459,10 +517,9 @@ function lineIntermediateCoordinatesFactory(
     ];
   }
 
-  validCoordinatesCollection = [...new Set(validCoordinatesCollection)]; //get rid of duplicates
+  validCoordinatesCollection = [...new Set(validCoordinatesCollection)]; //get rid of duplicates if there are any
   console.log(generatedIntCoordinates);
   console.log(validCoordinatesCollection);
-  //THIS IS THE PROBLEM ABOVE!!!!!!!!!!!!!!!!!!!!!!
 }
 
 function checkIfEndPointAlreadyExists(
@@ -947,16 +1004,36 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
 
 //Exposed functions to use API for client server communication
 app.ports.request.subscribe((message) => {
-  //parse message to determine a response and then respond
-  message = JSON.parse(message);
-  console.log("CLIENT REQUEST IS BELOW");
-  console.log(message);
+  if (gameIsOverAndNeedsReset === true) {
+    console.log("TRYING TO RESET THE GAME");
+    let initGameReset = {
+      msg: "INITIALIZE",
+      body: {
+        heading: "Player" + playerTurn,
+        message: "Your move player 1",
+        newLine: null,
+      },
+    };
 
-  //send the message to be analyzed by the responseFactory function
-  let response = messageResponseFactory(message); //catch the returned value and send it to client for processing
-  console.log("SERVER RESPONSE IS BELOW");
-  console.log(response);
+    //send the message to be analyzed by the responseFactory function
+    let response = initGameReset; //catch the returned value and send it to client for processing
+    console.log("SERVER RESPONSE IS BELOW");
+    console.log(response);
+    gameIsOverAndNeedsReset = false;
+    //when the response is determined, send the response to the client
+    app.ports.response.send(response);
+  } else {
+    //parse message to determine a response and then respond
+    message = JSON.parse(message);
+    console.log("CLIENT REQUEST IS BELOW");
+    console.log(message);
 
-  //when the response is determined, send the response to the client
-  app.ports.response.send(response);
+    //send the message to be analyzed by the responseFactory function
+    let response = messageResponseFactory(message); //catch the returned value and send it to client for processing
+    console.log("SERVER RESPONSE IS BELOW");
+    console.log(response);
+
+    //when the response is determined, send the response to the client
+    app.ports.response.send(response);
+  }
 });

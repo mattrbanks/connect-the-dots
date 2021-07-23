@@ -5,7 +5,26 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="app"></div>
+    <div id="main">
+      <div id="added-features">
+        <div id="ui-buttons">
+          <h1 id="title">Hold That Line: Dot Game</h1>
+          <button id="reset-game" onclick="resetGame()">Reset</button>
+          <button id="clear-scores" onclick="clearScores()">
+            Clear Scores
+          </button>
+          <button id="directions">Directions</button>
+        </div>
+        <div id="score">Score Board</div>
+        <div id="score-boxes">
+          <div id="player1-score-title">P1</div>
+          <div id="player1-score"></div>
+          <div id="player2-score-title">P2</div>
+          <div id="player2-score"></div>
+        </div>
+      </div>
+      <div id="app"></div>
+    </div>
     <script src="ui.js"></script>
     <script src="init.js"></script>
     <script src="server.js"></script>

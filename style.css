@@ -12,10 +12,14 @@ body {
     font-size: 1.6rem;
 }
 
+#app {
+    position: relative;
+}
+
 #app,
 #app .error-wrapper {
     width: 100vw;
-    height: 100vh;
+    height: 70vh;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -34,7 +38,7 @@ body {
 
 #app .heading,
 #app .message {
-    position: fixed;
+    position: absolute;
     left: 0;
     width: 100vw;
     text-align: center;
@@ -71,4 +75,37 @@ body {
 #app .error .body {
     background: #FFD9D9;
     line-height: 2.2rem;
+}
+
+#main {
+
+text-align: center;
+margin-bottom: 1rem;
+}
+
+#score {
+    margin: 6rem 0 4rem 0;
+}
+
+#score-boxes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+#player1-score, #player2-score {
+    width: 10rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#title {
+    margin-top: 0;
+    padding: 2rem 0 2rem 0;
+    background: blue;
+    color: white;
 }
