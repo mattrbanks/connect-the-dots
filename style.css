@@ -20,7 +20,7 @@ body {
 #app,
 #app .error-wrapper {
   width: 100vw;
-  height: 50vh;
+  height: 45rem;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -133,6 +133,12 @@ body {
 }
 
 #directions {
-    margin: 1rem 3rem 3rem 3rem;
-    text-align: left;
+  margin: 1rem;
+  text-align: left;
+  width: 60%;
+}
+
+#directions-container {
+  display: flex;
+  justify-content: center;
 }
