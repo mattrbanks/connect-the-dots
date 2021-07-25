@@ -90,7 +90,7 @@ function initialize() {
     msg: "INITIALIZE",
     body: {
       heading: "Player" + playerTurn,
-      message: "Your move player 1",
+      message: "Your move player 1. Select a node to start.",
       newLine: null,
     },
   };
@@ -162,7 +162,7 @@ function nodeClickResponseFactory(nodePointClicked) {
       msg: "INVALID_START_NODE",
       body: {
         heading: "Player" + playerTurn,
-        message: "Invalid move!!! Start over please.1",
+        message: "Invalid move!!! Start over please.",
         newLine: null,
       },
     };
@@ -261,7 +261,7 @@ function nodeClickResponseFactory(nodePointClicked) {
         msg: "INVALID_END_NODE",
         body: {
           heading: "Player" + playerTurn,
-          message: "Invalid move!!! Start over please.3",
+          message: "Invalid move!!! Start over please.",
           newLine: null,
         },
       };
@@ -272,7 +272,7 @@ function nodeClickResponseFactory(nodePointClicked) {
       msg: "INVALID_START_NODE",
       body: {
         heading: "Player" + playerTurn,
-        message: "Invalid move!!! Start over please.2",
+        message: "Invalid move!!! Start over please.",
         newLine: null,
       },
     };
