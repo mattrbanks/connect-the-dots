@@ -585,8 +585,8 @@ function checkIfProposedLineWillIntersect(
 function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
   let endNodeOnePasses = true;
   let endNodeTwoPasses = true;
-  let areTherePassingNodesFromEndNodeOne = false; //these switch to true if at least one thing passes
-  let areTherePassingNodesFromEndNodeTwo = false;
+  let areTherePassingNodesFromEndNodeOne = []; //these switch to true if at least one thing passes
+  let areTherePassingNodesFromEndNodeTwo = [];
   //change these for scalability when gridSize changes
   let gridSize = 4;
   let gridMax = 3;
@@ -758,6 +758,12 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
     for (let j = existingLinesCollection.length - 1; j >= 0; j--) {
       let startingPointX = mostRecentEndNodeOne.x;
       let startingPointY = mostRecentEndNodeOne.y;
+      console.log(
+        availableNodesOneRoundOne,
+        availableNodesOneRoundOne[i].x,
+        availableNodesOneRoundOne[i].y,
+        existingLinesCollection
+      );
       let endingPointX = availableNodesOneRoundOne[i].x;
       let endingPointY = availableNodesOneRoundOne[i].y;
       let existingStartingPointX =
@@ -778,23 +784,74 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         existingEndingPointY
       );
 
+      console.log(isThereAnIntersectionConflict);
       if (
-        isThereAnIntersectionConflict !== false &&
-        isThereAnIntersectionConflict[0] !== startingPointX &&
-        isThereAnIntersectionConflict[1] !== startingPointY
+        isThereAnIntersectionConflict[0] === startingPointX &&
+        isThereAnIntersectionConflict[1] === startingPointY
       ) {
-        availableNodesOneRoundOne.splice(i, 1);
-        i--;
-        if (availableNodesOneRoundOne.length === 0) {
-          break;
-        } else {
-          continue;
+        areTherePassingNodesFromEndNodeOne = [
+          ...areTherePassingNodesFromEndNodeOne,
+          availableNodesOneRoundOne[i],
+        ];
+      } else {
+        if (
+          isThereAnIntersectionConflict !== false &&
+          isThereAnIntersectionConflict[0] !== startingPointX &&
+          isThereAnIntersectionConflict[1] !== startingPointY
+        ) {
+          console.log(
+            availableNodesOneRoundOne,
+            availableNodesOneRoundOne.length
+          );
+          // availableNodesOneRoundOne.splice(i, 1);
+          console.log(availableNodesOneRoundOne[i]);
+          // i--;
+
+          if (
+            areTherePassingNodesFromEndNodeOne.length === 1 &&
+            availableNodesOneRoundOne[0].x ===
+              areTherePassingNodesFromEndNodeOne[0].x &&
+            availableNodesOneRoundOne[0].y ===
+              areTherePassingNodesFromEndNodeOne[0].y
+          ) {
+            console.log("WE ARE IN!!!!!!!!");
+            endNodeOnePasses = false;
+            // areTherePassingNodesFromEndNodeOne = [];
+            console.log(
+              areTherePassingNodesFromEndNodeOne,
+              availableNodesOneRoundOne,
+              isThereAnIntersectionConflict
+            );
+          }
+
+          if (availableNodesOneRoundOne.length === 0) {
+            console.log(availableNodesOneRoundOne[i]);
+            break;
+          } else {
+            console.log(availableNodesOneRoundOne[i]);
+            continue;
+          }
         }
-      } else if (
-        isThereAnIntersectionConflict === false &&
-        isThereAnIntersectionConflict[0] !== startingPointX &&
-        isThereAnIntersectionConflict[1] !== startingPointY
-      ) {
+
+        if (
+          isThereAnIntersectionConflict === false
+          // &&
+          // isThereAnIntersectionConflict[0] !== startingPointX &&
+          // isThereAnIntersectionConflict[1] !== startingPointY
+        ) {
+          console.log(
+            availableNodesOneRoundOne[i],
+            availableNodesOneRoundOne.length,
+            areTherePassingNodesFromEndNodeOne
+          );
+          areTherePassingNodesFromEndNodeOne = [
+            ...areTherePassingNodesFromEndNodeOne,
+            availableNodesOneRoundOne[i],
+          ];
+          areTherePassingNodesFromEndNodeOne = [
+            ...new Set(areTherePassingNodesFromEndNodeOne),
+          ];
+        }
       }
     }
   }
@@ -804,6 +861,12 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
     for (let j = existingLinesCollection.length - 1; j >= 0; j--) {
       let startingPointX = mostRecentEndNodeTwo.x;
       let startingPointY = mostRecentEndNodeTwo.y;
+      console.log(
+        availableNodesTwoRoundOne,
+        availableNodesTwoRoundOne[i].x,
+        availableNodesTwoRoundOne[i].y,
+        existingLinesCollection
+      );
       let endingPointX = availableNodesTwoRoundOne[i].x;
       let endingPointY = availableNodesTwoRoundOne[i].y;
       let existingStartingPointX =
@@ -823,37 +886,96 @@ function gameOver(mostRecentEndNodeOne, mostRecentEndNodeTwo) {
         existingEndingPointX,
         existingEndingPointY
       );
+
+      console.log(isThereAnIntersectionConflict); //gives point or false
       if (
-        isThereAnIntersectionConflict !== false &&
-        isThereAnIntersectionConflict[0] !== startingPointX &&
-        isThereAnIntersectionConflict[1] !== startingPointY
+        isThereAnIntersectionConflict[0] === startingPointX &&
+        isThereAnIntersectionConflict[1] === startingPointY
       ) {
-        availableNodesTwoRoundOne.splice(i, 1);
-        i--;
-        if (availableNodesTwoRoundOne.length === 0) {
-          break;
-        } else {
-          continue;
+        areTherePassingNodesFromEndNodeTwo = [
+          ...areTherePassingNodesFromEndNodeTwo,
+          availableNodesTwoRoundOne[i],
+        ];
+      } else {
+        if (
+          isThereAnIntersectionConflict !== false &&
+          isThereAnIntersectionConflict[0] !== startingPointX &&
+          isThereAnIntersectionConflict[1] !== startingPointY
+        ) {
+          console.log(
+            availableNodesTwoRoundOne,
+            availableNodesTwoRoundOne.length
+          );
+          // availableNodesTwoRoundOne.splice(i, 1);
+          console.log(availableNodesTwoRoundOne[i]);
+          // i--;
+
+          if (
+            areTherePassingNodesFromEndNodeTwo.length === 1 &&
+            availableNodesTwoRoundOne[0].x ===
+              areTherePassingNodesFromEndNodeTwo[0].x &&
+            availableNodesTwoRoundOne[0].y ===
+              areTherePassingNodesFromEndNodeTwo[0].y
+          ) {
+            console.log("WE ARE IN!!!!!!!!");
+            endNodeTwoPasses = false;
+            // areTherePassingNodesFromEndNodeTwo = [];
+            console.log(
+              areTherePassingNodesFromEndNodeTwo,
+              availableNodesTwoRoundOne,
+              isThereAnIntersectionConflict
+            );
+          }
+
+          if (availableNodesTwoRoundOne.length === 0) {
+            console.log(availableNodesTwoRoundOne[i]);
+            break;
+          } else {
+            console.log(availableNodesTwoRoundOne[i]);
+            continue;
+          }
         }
-      } else if (
-        isThereAnIntersectionConflict === false &&
-        isThereAnIntersectionConflict[0] !== startingPointX &&
-        isThereAnIntersectionConflict[1] !== startingPointY
-      ) {
+
+        if (
+          isThereAnIntersectionConflict === false
+          // &&
+          // isThereAnIntersectionConflict[0] !== startingPointX &&
+          // isThereAnIntersectionConflict[1] !== startingPointY
+        ) {
+          console.log(
+            availableNodesTwoRoundOne[i],
+            availableNodesTwoRoundOne.length,
+            areTherePassingNodesFromEndNodeTwo
+          );
+          areTherePassingNodesFromEndNodeTwo = [
+            ...areTherePassingNodesFromEndNodeTwo,
+            availableNodesTwoRoundOne[i],
+          ];
+          areTherePassingNodesFromEndNodeTwo = [
+            ...new Set(areTherePassingNodesFromEndNodeTwo),
+          ];
+        }
       }
     }
   }
 
-  if (availableNodesOneRoundOne.length === 0) {
+  if (areTherePassingNodesFromEndNodeOne.length === 0) {
     endNodeOnePasses = false;
   }
 
-  if (availableNodesTwoRoundOne.length === 0) {
+  if (areTherePassingNodesFromEndNodeTwo.length === 0) {
     endNodeTwoPasses = false;
   }
-  // if (areTherePassingNodesFromEndNodeTwo === false) {
-  //   endNodeTwoPasses = false;
-  // }
+  console.log(
+    endNodeOnePasses,
+    areTherePassingNodesFromEndNodeOne.length,
+    areTherePassingNodesFromEndNodeOne,
+    availableNodesOneRoundOne,
+    endNodeTwoPasses,
+    areTherePassingNodesFromEndNodeTwo.length,
+    areTherePassingNodesFromEndNodeTwo,
+    availableNodesTwoRoundOne
+  );
 
   //if all 16 surrounding nodes fail from both valid start nodes the game is over and return game over value
   availableNodesOneRoundOne = [];
