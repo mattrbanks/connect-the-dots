@@ -4,7 +4,7 @@
   Connect The Dots Game
 </h1>
 
-This is a connect-the-dots game for two players.
+This is a 2 player connect the dots game called Hold That Line. It was created by Sid Sackson and was originally played with pen and paper.
 
 ## Technologies Used
 
@@ -20,7 +20,7 @@ This is a connect-the-dots game for two players.
 
 ##### Definitions
 
-- **octilinear line - a horizontal, vertical, or 45° diagonal line**
+- **Octilinear line - a horizontal, vertical, or 45° diagonal line**
 
 ##### Rules
 
